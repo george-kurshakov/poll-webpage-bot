@@ -22,8 +22,6 @@ from telegram import ForceReply, Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters, Job
 from urllib.request import urlopen
 from datetime import timedelta, datetime
-from dotenv import load_dotenv
-
 
 
 # Enable logging
@@ -93,8 +91,10 @@ async def monitor_url(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
-    load_dotenv()
-    application = Application.builder().token(os.environ.get("TELEGRAM_BOT_TOKEN")).build()
+    token_file = os.environ.get("TOKEN_FILE")
+    with open(token_file) as f:
+        token = f.read().strip()
+    application = Application.builder().token(token).build()
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
